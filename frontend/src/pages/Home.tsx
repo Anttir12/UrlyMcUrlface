@@ -25,7 +25,7 @@ export default function Home() {
             });
     }
 
-    const handleInputBlur = (e: React.FocusEvent<HTMLInputElement>) => {
+    const handleInputChange = (e: React.FocusEvent<HTMLInputElement>) => {
         setUrl(e.target.value);
         setUrlError([]);
     }
@@ -35,12 +35,12 @@ export default function Home() {
             {!urlyId ?
                 <>
                     <Col xs={12} className={"home-title"}>
-                        <h1>Welcome to urlyMcUrlFace's URL shortener!</h1>
+                        <h1>Welcome to UrlyMcUrlFace's URL shortener!</h1>
                     </Col>
                     <Form onSubmit={handleSubmit} className={"col-xs-12 form-container"}>
                         <Form.Group>
                             <Form.Control type={"text"} placeholder={"Type/paste your URL here"}
-                                          onBlur={handleInputBlur} isInvalid={urlError.length > 0} required/>
+                                          onChange={handleInputChange} isInvalid={urlError.length > 0} required/>
                             <Form.Control.Feedback type={"invalid"}>
                                 {urlError.map(err => {return <p>{err}</p>})}
                             </Form.Control.Feedback>
