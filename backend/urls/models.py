@@ -8,7 +8,7 @@ from django.utils import timezone
 class Urly(models.Model):
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
     created_at = models.DateTimeField(default=timezone.now, editable=False)
-    url = models.URLField()
+    url = models.URLField(max_length=2048)
     slug = models.SlugField(max_length=32, unique=True)
 
 
