@@ -1,7 +1,7 @@
 from django.db.models import DateTimeField, Count
 from django.db.models.functions import Trunc
 from django.http import HttpResponsePermanentRedirect
-from django.shortcuts import get_object_or_404
+from django.shortcuts import get_object_or_404, render
 from rest_framework import generics, permissions
 from rest_framework.exceptions import ValidationError
 from rest_framework.generics import ListAPIView
@@ -9,6 +9,9 @@ from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 
 from urls import models, serializers
+
+def index(request):
+    return render(request, "index.html")
 
 
 def urly_view(request, slug):

@@ -1,0 +1,21 @@
+version: "3.3"
+
+services:
+  urly:
+    image: urly:latest
+    command: uwsgi --ini /app/urly_uwsgi.ini
+    restart: unless-stopped
+    env_file:
+      - .env
+    depends_on:
+      - urly-db
+    volumes:
+      - /tmp:/tmp
+
+  urly-db:
+    image: postgres:15
+    restart: unless-stopped
+    env_file:
+      - .env
+    volumes:
+      - ~/urly_db:/var/lib/postgresql/data
