@@ -21,13 +21,17 @@ class UrlyApiView(generics.CreateAPIView):
     serializer_class = serializers.UrlySerializer
 
 
-class UrlyVisitsDataView(ListAPIView):
+class UrlyVisitsDataView(generics.RetrieveDestroyAPIView):
     serializer_class = serializers.UrlyVisitsDataSerializer
 
-    def list(self, request, *args, **kwargs):
+    def get_object(self):
+        obj = get_object_or_404(models.Urly, id=self.kwargs["urly_id"])
+        return obj
+
+    def retrieve(self, request, *args, **kwargs):
         choices_and_limits = {"year": 10, "month": 60, "week": 52, "day": 180, "hour": 72}
         time_choice = self.request.query_params.get("time_choice", "day")
-        urly = get_object_or_404(models.Urly, id=kwargs["urly_id"])
+        urly = self.get_object()
         if time_choice not in choices_and_limits:
             raise ValidationError(f"Unsupported time_choice: {time_choice}")
         limit = choices_and_limits[time_choice]

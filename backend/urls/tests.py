@@ -42,3 +42,12 @@ class TestUrly(TestCase):
             {'time': '2022-02-02T02:00:00Z', 'count': 1}
         ]}
         self.assertEqual(expected_json, response.json())
+
+    def test_delete_urly(self):
+        urly1 = models.Urly.objects.create(url="https://google.fi", slug="slug1")
+        urly2 = models.Urly.objects.create(url="https://google.com", slug="slug2")
+
+        response = self.client.delete(reverse("api:urly_data", args=[urly1.id]))
+        self.assertEqual(204, response.status_code)
+        self.assertFalse(models.Urly.objects.filter(id=urly1.id).exists())
+        self.assertTrue(models.Urly.objects.filter(id=urly2.id).exists())
