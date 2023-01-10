@@ -1,6 +1,7 @@
 import React, {useState} from 'react';
 import {Button, Col, Form, Row} from "react-bootstrap";
 import axios from "axios";
+import './Home.css';
 
 
 export default function Home() {
@@ -30,42 +31,48 @@ export default function Home() {
     }
 
     return (
-        <>
+        <Row className={"home-row"}>
             {!urlyId ?
                 <>
-                    <Row>
-                        <Col xs={12}>
-                            <h1>Welcome to urlyMcUrlFace's URL shortener!</h1>
-                        </Col>
-                    </Row>
-                    <Row>
-                        <Col xs={12}>
-                            <Form onSubmit={handleSubmit}>
-                                <Form.Group>
-                                    <Form.Control type={"text"} placeholder={"Type your URL here"}
-                                                  onBlur={handleInputBlur} isInvalid={urlError.length > 0} required/>
-                                    <Form.Control.Feedback type={"invalid"}>
-                                        {urlError.map(err => {return <p>{err}</p>})}
-                                    </Form.Control.Feedback>
-                                </Form.Group>
-                                <Button variant={"primary"} type={"submit"}>
-                                    Submit
-                                </Button>
-                            </Form>
-                        </Col>
-                    </Row>
+                    <Col xs={12} className={"home-title"}>
+                        <h1>Welcome to urlyMcUrlFace's URL shortener!</h1>
+                    </Col>
+                    <Form onSubmit={handleSubmit} className={"col-xs-12 form-container"}>
+                        <Form.Group>
+                            <Form.Control type={"text"} placeholder={"Type/paste your URL here"}
+                                          onBlur={handleInputBlur} isInvalid={urlError.length > 0} required/>
+                            <Form.Control.Feedback type={"invalid"}>
+                                {urlError.map(err => {return <p>{err}</p>})}
+                            </Form.Control.Feedback>
+                        </Form.Group>
+                        <Form.Group className={"col-xs-12 mt-3 d-flex justify-content-center"}>
+                            <Button variant={"primary"} type={"submit"}>
+                                Urlify!
+                            </Button>
+                        </Form.Group>
+                    </Form>
                 </>
                 :
                 <>
-                    <h2>URL CREATED!</h2>
-                    <p>Shortened URL: <b><a href={urly}>{urly}</a></b></p>
-                    <p>You can monitor URL usage here: <a href={`/s/${urlyId}`}>{window.location.origin}/s/{urlyId}</a></p>
-                    <Button onClick={() => {
-                        setUrlyId(null);
-                        setUrly("");
-                    }}>Create new URL</Button>
+                    <Col xs={12} className={"home-title"}>
+                        <h2>Urly created!</h2>
+                    </Col>
+                    <Col xs={12}>
+                        Short Urly: <b><a href={urly}>{urly}</a></b>
+                    </Col>
+                    <Col xs={12}>
+                        You can monitor URL usage here: <a href={`/s/${urlyId}`}>{window.location.origin}/s/{urlyId}</a>
+                    </Col>
+                    <Col xs={12}>
+                        <p>Need more Urlies? Click the button!</p>
+                        <Button onClick={() => {
+                            setUrlyId(null);
+                            setUrly("");
+                        }}>Create new URL</Button>
+                    </Col>
+
                 </>
             }
-        </>
+        </Row>
     );
 }

@@ -1,6 +1,6 @@
 import React from 'react';
 import logo from './logo.svg';
-import './App.css';
+
 import {Container} from "react-bootstrap";
 import 'bootstrap/dist/css/bootstrap.min.css';
 import Home from "./pages/Home";
@@ -10,9 +10,12 @@ import {
   Routes
 } from "react-router-dom";
 import UrlyStats from "./pages/UrlyStats";
+import UrlyNav from "./pages/Header";
 
 function App() {
   return (
+  <>
+    <UrlyNav />
     <Container className="App">
         <Router>
             <Routes>
@@ -21,6 +24,7 @@ function App() {
             </Routes>
         </Router>
     </Container>
+  </>
   );
 }
 

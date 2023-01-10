@@ -1,10 +1,9 @@
 import React, {useEffect, useMemo, useState} from 'react';
-import {Button, Col, Form, Row} from "react-bootstrap";
-import {useParams} from "react-router-dom";
+import {Button, Col, Row} from "react-bootstrap";
+import {useNavigate, useParams} from "react-router-dom";
 import axios from "axios";
 import {
     Chart as ChartJS,
-    CategoryScale,
     LinearScale,
     PointElement,
     LineElement,
@@ -58,18 +57,20 @@ const timeChoices: Array<TimeChoiceType> = ["hour", "day", "week", "month", "yea
 
 export default function UrlyStats () {
     const { id } = useParams();
-    const [loading, setLoading] = useState<boolean>(true)
-    const [notFound, setNotFound] = useState<boolean>(false)
     const [stats, setStats] = useState<UrlyData|null>(null)
     const [chartData, setChartData] = useState<ChartData<"line">>();
     const [timeChoice, setTimeChoice] = useState<TimeChoiceType>("day")
+
+    const navigate = useNavigate()
 
     useEffect(() => {
         axios.get(`/api/urly/${id}?time_choice=${timeChoice}`)
             .then((res) => {
                 setStats(res.data)
             })
-            .catch(() => {setNotFound(true)})
+            .catch(() => {
+                navigate("/")
+            })
     }, [id, timeChoice])
 
     useMemo(() => {
@@ -89,29 +90,51 @@ export default function UrlyStats () {
 
     const urly = `${window.location.origin}/${stats?.slug}`
 
-    console.log("chartdata")
-    console.log(chartData)
+    const handleDelete = () => {
+        if(window.confirm("Are you sure you want to delete this Urly?")){
+            axios.delete(`/api/urly/${id}`)
+                .then(() => {
+                    navigate("/")
+                })
+                .catch(() => {
+                    window.alert("Delete failed")
+                })
+        }
+    }
 
     return (
         <>
             {stats &&
                 <>
-                    <Row>
+                    <Row className={"mt-4"}>
                         <Col xs={12}>
                             <h5>Url statistics for {stats?.urly_id} (<a href={urly}>{urly}</a>)</h5>
                         </Col>
                     </Row>
                     <Row>
-                        <Col xs={1}></Col>
-                        {timeChoices.map(c => <Col xs={2} key={c}><Button onClick={() => {setTimeChoice(c)}}>{c}</Button></Col>)}
-                    </Row>
-                    {chartData &&
-                        <Row>
-                            <Col xs={12}>
+                        {chartData &&
+                        <>
+                            <Col xs={12} md={9} lg={10}>
                                 <Line options={chartOptions} data={chartData}/>
                             </Col>
-                        </Row>
-                    }
+                            <Col xs={12} md={3} lg={2} className={"mt-md-5"}>
+                                {timeChoices.map(c =>
+                                    <Col xs={1} md={12} key={c} className={"mb-3"}>
+                                        <Button disabled={timeChoice === c} onClick={() => {setTimeChoice(c)}}>
+                                            {c}
+                                        </Button>
+                                    </Col>)}
+                            </Col>
+                        </>
+                        }
+                    </Row>
+                    <Row className={"mt-5"}>
+                        <Col>
+                            <Button variant={"danger"} onClick={handleDelete} className={"float-end"}>
+                                Delete this Urly
+                            </Button>
+                        </Col>
+                    </Row>
                 </>
             }
         </>

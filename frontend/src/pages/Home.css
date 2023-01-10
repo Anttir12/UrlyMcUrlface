@@ -1,0 +1,16 @@
+.home-row {
+   justify-content: center;
+}
+
+.home-title {
+    margin-top: 30vh;
+}
+
+.home-title h1 {
+    text-align: center;
+}
+
+.form-container {
+    margin-top: 2vh;
+    justify-content: center;
+}
